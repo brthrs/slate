@@ -1,239 +1,295 @@
 ---
-title: API Reference
+title: Messaging API Reference
 
-language_tabs: # must be one of https://git.io/vQNgJ
+language_tabs:
   - shell
-  - ruby
-  - python
-  - javascript
 
-toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
 
-includes:
-  - errors
-
-search: true
 ---
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the Scheduled Messaging API. You can use it to retreive your messages, create new ones and update or detele them.
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+We provided basic examples to test the different Messaging APU endpoint.
 
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
+This API documentation page must and was generated with [Slate](https://github.com/lord/slate)
 
 # Authentication
 
-> To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
+> To authorize, use the Authorization with every request:
 
 ```shell
 # With shell, you can just pass the correct header with each request
 curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+  -H "Authorization: scheduledrules"
 ```
 
-```javascript
-const kittn = require('kittn');
+> Make sure to replace `scheduledrules` with your API key.
 
-let api = kittn.authorize('meowmeowmeow');
-```
+To use the Message API you need an API key. You can find your personal API key in the [Scheduled Web app settings page](https://webapp.scheduledapp.com/).
 
-> Make sure to replace `meowmeowmeow` with your API key.
+The Message API expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+`Authorization: scheduledrules`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>scheduledrules</code> with your personal API key.
 </aside>
 
-# Kittens
+# Message
 
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
+## Get All Messages
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl "https://webapp.scheduledapp.com/api/messages" \
+  -H "Authorization: scheduledrules"
 ```
 
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
+> The above command returns JSON structured list like this:
 
 ```json
 [
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+    "uid": "dJq2jvUOok2FdDxKAt9",
+    "text": "Hello There",
+    "recipients": [
+      {
+        "phone": "+316876543210",
+        "lastname": "Appleseed",
+        "firstname": "John"
+      }
+    ],
+    "spentCredits": 1,
+    "repeatMode": "kSCHRepeatModeNone",
+    "scheduledDate": "2019-03-31T10:50:25.227Z",
+    "autosend": true,
+    "archived": true
   },
   {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
+    "uid": "ouv0JudLkGm8CmS9iKj",
+    "text": "Hello Email",
+    "recipients": [
+      {
+        "email": "test@test.com",
+        "lastname": "Appleseed",
+        "firstname": "John"
+      }
+    ],
+    "spentCredits": 1,
+    "repeatMode": "kSCHRepeatModeNone",
+    "scheduledDate": "2019-03-11T10:50:25.227Z",
+    "autosendemail": true
+  },
 ]
 ```
 
-This endpoint retrieves all kittens.
+This endpoint retrieves all your messages.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET https://webapp.scheduledapp.com/api/messages
 
-### Query Parameters
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
+## Get a Specific Message
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
+curl "https://webapp.scheduledapp.com/api/messages/dJq2jvUOok2FdDxKAt9" \
+  -H "Authorization: scheduledrules"
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
+    "uid": "dJq2jvUOok2FdDxKAt9",
+    "text": "Hello There",
+    "recipients": [
+      {
+        "phone": "+316876543210",
+        "lastname": "Appleseed",
+        "firstname": "John"
+      }
+    ],
+    "spentCredits": 1,
+    "repeatMode": "kSCHRepeatModeNone",
+    "scheduledDate": "2019-03-31T10:50:25.227Z",
+    "autosend": true,
+    "archived": true
+  }
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+This endpoint retrieves a specific message.
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET https://webapp.scheduledapp.com/api/messages/<UID>`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to retrieve
+UID       | The UID of the message to receive
 
-## Delete a Specific Kitten
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
+## Create a new Message
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
+curl "https://webapp.scheduledapp.com/api/messages" \
+  -X POST \
+  -H "Authorization: scheduledrules" \
+  -H 'Content-Type: application/json; charset=utf-8' \
+  -d $'{
+  "recipients": [
+    {
+      "firstname": "Jonh",
+      "lastname": "Appleseed",
+      "phone": "+316876543210"
+    }
+  ],
+  "text": "Hello There",
+  "sentDate": "2019-12-30T10:50:25.227Z"
+}'
 ```
 
-```javascript
-const kittn = require('kittn');
+> The above command returns JSON structured of the message:
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
+```json
+{
+  "uid": "ouv0Ju8dLkGm8CmS9iK",
+  "text": "Hello There",
+  "recipients": [
+    {
+      "lastname": "Jonh",
+      "firstname": "Appleseed",
+      "phone": "+316876543210"
+    }
+  ],
+  "spentCredits": 1,
+  "repeatMode": "kSCHRepeatModeNone",
+  "scheduledDate": "2019-12-30T10:50:25.227Z",
+  "autosend": true
+}
+```
+
+This endpoint creates a new message.
+
+### HTTP Request
+
+`POST https://webapp.scheduledapp.com/api/messages`
+
+### JSON payload key values
+
+| Parameter            | Type   | Required | Description                                                                                                                                                                            |
+|----------------------|--------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| text                 | String |     *    | The test message you want to send                                                                                                                                                      |
+| subject              | String |          | Only used when schedule a email message                                                                                                                                                |
+| scheduledDate        | Date   |     *    | Date and time when to send the message                                                                                                                                                 |
+| recipients           | Array  |     *    | Array with recipients                                                                                                                                                                  |
+| recipients.firstname | String |          | First name of the recipient                                                                                                                                                            |
+| recipients.lastname  | String |          | Last name of the recipient                                                                                                                                                             |
+| recipients.phone     | String |     *    | Phone number of recipient (required when scheduling sms)                                                                                                                               |
+| recipients.email     | String |     *    | Email address of recipient (required when scheduling email)                                                                                                                            |
+| repeatMode           | String |          | One of the following: kSCHRepeatModeNone, kSCHRepeatModeDaily, kSCHRepeatModeWeekly,  kSCHRepeatModeMonthly, kSCHRepeatModeYearly, kSCHRepeatModeWeekdays, kSCHRepeatModeEveryTwoWeeks |
+| repeatEndDate        | Date   |          | Date and time when the repeat modus must stop                                                                                                                                          |
+| autosend             | Bool   |          | Set to true if you want to schedule a sms message                                                                                                                                      |
+| autosendemail        | Bool   |          | Set to true if you want to schedule a email message                                                                                                                                    |
+
+## Update a Specific Message
+
+```shell
+curl "https://webapp.scheduledapp.com/api/messages/ouv0Ju8dLkGm8CmS9iK" \
+  -X PUT \
+  -H "Authorization: scheduledrules" \
+  -H 'Content-Type: application/json; charset=utf-8' \
+  -d $'{
+  "recipients": [
+    {
+      "firstname": "Jonh",
+      "lastname": "Appleseed",
+      "phone": "+316876543210"
+    }
+  ],
+  "text": "Hello There",
+  "sentDate": "2019-12-31T10:50:25.227Z"
+}'
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "deleted" : ":("
+  "uid": "ouv0Ju8dLkGm8CmS9iK",
+  "text": "Hello There",
+  "recipients": [
+    {
+      "lastname": "Jonh",
+      "firstname": "Appleseed",
+      "phone": "+316876543210"
+    }
+  ],
+  "spentCredits": 1,
+  "repeatMode": "kSCHRepeatModeNone",
+  "scheduledDate": "2019-12-31T10:50:25.227Z",
+  "autosend": true
 }
 ```
 
-This endpoint deletes a specific kitten.
+This endpoint retrieves a specific message.
 
 ### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+`PUT https://webapp.scheduledapp.com/api/messages/<UID>`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to delete
+UID | The UID of the message to receive
 
+### JSON payload key values
+
+| Parameter            | Type   | Required | Description                                                                                                                                                                            |
+|----------------------|--------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| text                 | String |     *    | The test message you want to send                                                                                                                                                      |
+| subject              | String |          | Only used when schedule a email message                                                                                                                                                |
+| scheduledDate        | Date   |     *    | Date and time when to send the message                                                                                                                                                 |
+| recipients           | Array  |     *    | Array with recipients                                                                                                                                                                  |
+| recipients.firstname | String |          | First name of the recipient                                                                                                                                                            |
+| recipients.lastname  | String |          | Last name of the recipient                                                                                                                                                             |
+| recipients.phone     | String |     *    | Phone number of recipient (required when scheduling sms)                                                                                                                               |
+| recipients.email     | String |     *    | Email address of recipient (required when scheduling email)                                                                                                                            |
+| repeatMode           | String |          | One of the following: kSCHRepeatModeNone, kSCHRepeatModeDaily, kSCHRepeatModeWeekly,  kSCHRepeatModeMonthly, kSCHRepeatModeYearly, kSCHRepeatModeWeekdays, kSCHRepeatModeEveryTwoWeeks |
+| repeatEndDate        | Date   |          | Date and time when the repeat modus must stop                                                                                                                                          |
+| autosend             | Bool   |          | Set to true if you want to schedule a sms message                                                                                                                                      |
+| autosendemail        | Bool   |          | Set to true if you want to schedule a email message                                                                                                                                    |
+
+
+## Delete a Specific Message
+
+```shell
+curl "https://webapp.scheduledapp.com/api/messages/ouv0Ju8dLkGm8CmS9iK" \
+  -X DELETE \
+  -H "Authorization: scheduledrules" \
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "id": "ouv0Ju8dLkGm8CmS9iK",
+  "deleted" : true
+}
+```
+
+This endpoint deletes a specific message.
+
+### HTTP Request
+
+`DELETE https://webapp.scheduledapp.com/api/messages/<UID>`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+UID | The UID of the message to receive
